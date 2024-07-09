@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Analytics Microservice
+  description: >-
+    Documentation fot the Analytics microservice. It performs analytics
+    over the metadata provided by the detection service over Redis.
+  contact:
+    email: support@ridgerun.com
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Analytics Microservice
+  url: https://developer.ridgerun.com
+servers:
+  - url: http://127.0.0.1:5040
+tags:
+  - name: configuration
+    description: Analytics Configuration
+paths:
+  /configuration:
+    put:
+      tags:
+        - configuration
+      summary: Updates the service configuration.
+      description: Update the service configuration.
+      operationId: update_configuration
+      requestBody:
+        description: Indicates wheter move camera and record actions must be enabled. Also the ip and port of the ptz(move_camera) and vst(record) microservices. And a time threshold, for record it indicates the amount of time elapsed to start a new recording, any event before this threshold is ignored and for ptz it indicates the amount of time elapsed since previous event before the camera position is restarted.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/configuration'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Operation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    get:
+      tags:
+        - configuration
+      summary: Gets the service configuration
+      description: Gets the service configuration
+      operationId: get_configuration
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/configuration'
+        '400':
+          description: Operation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    configuration:
+      required:
+        - move_camera
+        - record
+      type: object
+      properties:
+        move_camera:
+          type: object
+          properties:
+            enable:
+              type: integer
+              format: int32
+              example: 1
+            port:
+              type: integer
+              format: int32
+              example: 5020
+            ip:
+              type: string
+              format: string
+              example: "127.0.0.1"
+            time_threshold:
+              type: integer
+              format: int32
+              example: 10
+        record:
+          type: object
+          properties:
+            enable:
+              type: integer
+              format: int32
+              example: 1
+            port:
+              type: integer
+              format: int32
+              example: 81
+            ip:
+              type: string
+              format: string
+              example: "127.0.0.1"
+            time_threshold:
+              type: integer
+              format: int32
+              example: 10
+
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
