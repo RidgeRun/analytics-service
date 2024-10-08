@@ -1,4 +1,4 @@
-## RidgeRun Analytics Microservice 1.0.0
+## RidgeRun Analytics Microservice 1.0.1
 
 
 Analytics Microservice reads the detection metadata from redis and executes the enabled actions.
